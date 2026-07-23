@@ -105,13 +105,14 @@ Current domain model:
 ```text
 domain
 ├── model
-│   ├── Brand
-│   ├── Product
-│   └── Price
-└── vo
-    ├── BrandId
-    ├── ProductId
-    └── Money
+│   ├── Brand.java
+│   ├── Product.java
+│   └── Price.java
+├── vo
+│   ├── BrandId.java
+│   ├── ProductId.java
+│   └── Money.java
+└── package-info.java
 ```
 
 #### Domain Model Decisions
