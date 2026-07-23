@@ -18,6 +18,7 @@ The project currently provides the initial application bootstrap and build confi
 | Code Quality | Checkstyle |
 | Framework | Spring Boot |
 | Web | Spring Web |
+| Development Tools | Lombok |
 | Testing | Spring Boot Test |
 
 ## Getting Started
