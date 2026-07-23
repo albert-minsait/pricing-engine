@@ -15,6 +15,7 @@ The project currently provides the initial application bootstrap and build confi
 | --- | --- |
 | Build | Maven |
 | Code Formatting | Spotless, Eclipse JDT Formatter |
+| Code Quality | Checkstyle |
 | Framework | Spring Boot |
 | Web | Spring Web |
 | Testing | Spring Boot Test |
@@ -66,6 +67,7 @@ http://localhost:8080
 ├── .vscode
 │   └── settings.json
 ├── config
+│   ├── checkstyle.xml
 │   └── formatter.xml
 ├── src
 │   ├── main
