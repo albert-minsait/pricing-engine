@@ -11,12 +11,13 @@ The project currently provides the initial application bootstrap and build confi
 
 ## Technologies
 
-- Spring Boot
-- Spring Web
-- Spring Boot Test
-- Maven
-- Spotless
-- Eclipse JDT Formatter
+| Category | Technologies |
+| --- | --- |
+| Build | Maven |
+| Code Formatting | Spotless, Eclipse JDT Formatter |
+| Framework | Spring Boot |
+| Web | Spring Web |
+| Testing | Spring Boot Test |
 
 ## Getting Started
 
@@ -30,7 +31,7 @@ mvn clean package
 
 ### Verify
 
-Run the complete verification lifecycle, including code formatting verification:
+Run the complete verification lifecycle:
 
 ```bash
 mvn clean verify
@@ -62,15 +63,24 @@ http://localhost:8080
 
 ```text
 .
-├── formatter
-│   └── eclipse-formatter.xml
-└── src
-    ├── main
-    │   ├── java
-    │   └── resources
-    └── test
-        ├── java
-        └── resources
+├── .vscode
+│   └── settings.json
+├── config
+│   └── formatter.xml
+├── src
+│   ├── main
+│   │   ├── java
+│   │   │   └── es.inditex.pricingengine
+│   │   └── resources
+│   └── test
+│       └── java
+│           └── es.inditex.pricingengine
+├── .gitattributes
+├── .gitignore
+├── mvnw
+├── mvnw.cmd
+├── pom.xml
+└── README.md
 ```
 
 ## License
