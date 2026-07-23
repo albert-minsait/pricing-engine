@@ -1,22 +1,7 @@
 {
   // ==========================================================================
-  // Editor
-  // ==========================================================================
-  "editor.detectIndentation": false,
-  "editor.insertSpaces": true,
-  "editor.tabSize": 2,
-
-  // ==========================================================================
-  // Files
-  // ==========================================================================
-  "files.encoding": "utf8",
-  "files.eol": "\n",
-  "files.insertFinalNewline": true,
-  "files.trimFinalNewlines": true,
-  "files.trimTrailingWhitespace": true,
-
-  // ==========================================================================
   // Java
   // ==========================================================================
-  "java.configuration.updateBuildConfiguration": "automatic"
+  "java.configuration.updateBuildConfiguration": "automatic",
+  "java.format.settings.url": "config/formatter.xml"
 }
