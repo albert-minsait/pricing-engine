@@ -7,8 +7,10 @@
 /**
  * Root package for the Pricing Engine Service.
  *
- * <p>Contains the application bootstrap and the root packages for the Clean
- * Architecture layers.</p>
+ * <p>
+ * Contains the application bootstrap and the root packages for the Clean
+ * Architecture layers.
+ * </p>
  *
  * @author Albert
  */

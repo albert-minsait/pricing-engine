@@ -15,6 +15,8 @@ The project currently provides the initial application bootstrap and build confi
 - Spring Web
 - Spring Boot Test
 - Maven
+- Spotless
+- Eclipse JDT Formatter
 
 ## Getting Started
 
@@ -26,12 +28,20 @@ Build the project:
 mvn clean package
 ```
 
-### Test
+### Verify
 
-Run all tests:
+Run the complete verification lifecycle, including code formatting verification:
 
 ```bash
 mvn clean verify
+```
+
+### Format
+
+Apply source formatting:
+
+```bash
+mvn spotless:apply
 ```
 
 ### Run
@@ -51,13 +61,16 @@ http://localhost:8080
 ## Project Structure
 
 ```text
-src
-├── main
-│   ├── java
-│   └── resources
-└── test
-    ├── java
-    └── resources
+.
+├── formatter
+│   └── eclipse-formatter.xml
+└── src
+    ├── main
+    │   ├── java
+    │   └── resources
+    └── test
+        ├── java
+        └── resources
 ```
 
 ## License

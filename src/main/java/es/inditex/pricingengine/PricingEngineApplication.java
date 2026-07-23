@@ -18,7 +18,8 @@ public class PricingEngineApplication {
   /**
    * Starts the Pricing Engine Service.
    *
-   * @param args application arguments
+   * @param args
+   *               application arguments
    */
   public static void main(final String[] args) {
     SpringApplication.run(PricingEngineApplication.class, args);
