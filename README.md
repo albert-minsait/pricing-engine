@@ -2,7 +2,8 @@
 
 Pricing Engine is a Spring Boot service developed as part of a technical assessment.
 
-The project currently provides the initial application bootstrap and build configuration.
+The project provides a Spring Boot service implementation following Clean
+Architecture principles and domain-driven design practices.
 
 ## Requirements
 
@@ -85,6 +86,47 @@ http://localhost:8080
 ├── pom.xml
 └── README.md
 ```
+
+## Layers
+
+The application follows a Clean Architecture approach, separating business rules
+from application logic and infrastructure concerns.
+
+### Domain Layer
+
+The domain layer contains the core business concepts and rules of the Pricing
+Engine.
+
+This layer is independent of frameworks, persistence mechanisms and external
+technologies.
+
+Current domain model:
+
+```text
+domain
+├── model
+│   ├── Brand
+│   ├── Product
+│   └── Price
+└── vo
+    ├── BrandId
+    ├── ProductId
+    └── Money
+```
+
+#### Domain Model Decisions
+
+- Domain entities are implemented as immutable classes.
+- Domain entities are implemented as classes instead of records because their
+  identity is defined by their identifiers rather than by all their attributes.
+- Value objects are implemented using Java records because they represent
+  immutable values identified by their content.
+- Domain entities use Lombok only to reduce boilerplate code (`@Getter` and
+  `@RequiredArgsConstructor`).
+- Domain entities do not contain framework annotations such as JPA or Spring
+  annotations.
+- Monetary values are encapsulated in the `Money` value object, grouping the
+  amount and currency to avoid handling them separately across the application.
 
 ## License
 
