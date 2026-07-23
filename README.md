@@ -129,6 +129,54 @@ domain
 - Monetary values are encapsulated in the `Money` value object, grouping the
   amount and currency to avoid handling them separately across the application.
 
+### Application Layer
+
+The application layer contains the application use cases and coordinates the
+interaction between external actors and the domain layer.
+
+This layer defines the operations that the application exposes and the external
+dependencies required to execute them through input and output ports.
+
+Current application structure:
+
+```text
+application
+├── port
+│   ├── input
+│   │   └── GetPriceUseCase.java
+│   └── output
+│       └── PriceRepository.java
+├── usecase
+│   └── getprice
+│       ├── GetPriceInteractor.java
+│       └── result
+│           └── GetPriceResult.java
+└── package-info.java
+```
+
+#### Application Layer Decisions
+
+- The application layer follows a hexagonal architecture approach, separating
+  inbound interactions from outbound dependencies through input and output
+  ports.
+- Input ports define the use cases exposed by the application. External
+  adapters, such as REST controllers, depend on these abstractions instead of
+  depending on concrete implementations.
+- Output ports define the dependencies required by the application layer.
+  These ports are implemented by infrastructure adapters and can be reused by
+  different use cases.
+- Use case implementations are organized by business capability rather than by
+  technical type. This keeps related application logic together and allows the
+  application layer to scale as new use cases are added.
+- Use case implementations are named as interactors because they represent the
+  execution of a specific application use case, avoiding generic names such as
+  service or implementation classes.
+- Use case results are scoped to their corresponding use case instead of being
+  placed in shared application models. This avoids creating generic containers
+  shared by unrelated operations.
+- The application layer coordinates domain operations but does not contain
+  domain rules, persistence logic or framework-specific concerns.
+
 ## License
 
 This project is licensed under the MIT License.
