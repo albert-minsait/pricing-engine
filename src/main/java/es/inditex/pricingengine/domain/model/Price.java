@@ -63,21 +63,4 @@ public final class Price {
    * Monetary amount of the price.
    */
   private final Money amount;
-
-  /**
-   * Checks whether this price applies at the given date.
-   *
-   * <p>
-   * The validity interval includes both start and end dates.
-   * </p>
-   *
-   * @param applicationDate
-   *                          requested application date
-   *
-   * @return true when the price is valid for the requested date
-   */
-  public boolean isApplicableAt(LocalDateTime applicationDate) {
-    return !applicationDate.isBefore(startDate)
-        && !applicationDate.isAfter(endDate);
-  }
 }
