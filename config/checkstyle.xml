@@ -20,7 +20,7 @@
  -->
 <module name="Checker">
 	<property name="charset" value="UTF-8"/>
-	<property name="severity" value="${org.checkstyle.google.severity}" default="warning"/>
+	<property name="severity" value="${org.checkstyle.google.severity}" default="error"/>
 	<property name="fileExtensions" value="java, properties, xml"/>
 	<!-- Excludes all 'module-info.java' files              -->
 	<!-- See https://checkstyle.org/filefilters/index.html -->
@@ -201,7 +201,7 @@
 		<module name="TextBlockGoogleStyleFormatting"/>
 		<module name="EmptyLineSeparator">
 			<property name="tokens"
-               value="PACKAGE_DEF, IMPORT, STATIC_IMPORT, CLASS_DEF, INTERFACE_DEF, ENUM_DEF,
+               value="IMPORT, STATIC_IMPORT, CLASS_DEF, INTERFACE_DEF, ENUM_DEF,
                     STATIC_INIT, INSTANCE_INIT, METHOD_DEF, CTOR_DEF, VARIABLE_DEF, RECORD_DEF,
                     COMPACT_CTOR_DEF"/>
 			<property name="allowNoEmptyLineBetweenFields" value="true"/>
@@ -401,7 +401,7 @@
         value="^@return the *|^This method returns |^A [{]@code [a-zA-Z0-9]+[}]( is a )|^[a-z]"/>
 		</module>
 		<module name="JavadocParagraph">
-			<property name="allowNewlineParagraph" value="false"/>
+			<property name="allowNewlineParagraph" value="true"/>
 		</module>
 		<module name="RequireEmptyLineBeforeBlockTagGroup"/>
 		<module name="AtclauseOrder">
