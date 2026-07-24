@@ -90,17 +90,16 @@ class PriceTest {
 
   private Price createPrice(LocalDateTime startDate, LocalDateTime endDate) {
     final Brand brand = new Brand(
-        new BrandId(1L),
-        "ZARA");
+        new BrandId(1L));
     final Product product = new Product(
         new ProductId(35455L));
 
     return new Price(
         brand,
         product,
-        1,
         startDate,
         endDate,
+        1,
         0,
         new Money(
             new BigDecimal("35.50"),

@@ -25,9 +25,4 @@ public final class Brand {
    * Brand identifier.
    */
   private final BrandId id;
-
-  /**
-   * Brand name.
-   */
-  private final String name;
 }

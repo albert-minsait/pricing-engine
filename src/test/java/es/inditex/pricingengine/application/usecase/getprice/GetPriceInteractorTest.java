@@ -33,7 +33,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
  */
 @ExtendWith(MockitoExtension.class)
 class GetPriceInteractorTest {
-  private static final Brand BRAND = new Brand(new BrandId(1L), "ZARA");
+  private static final Brand BRAND = new Brand(new BrandId(1L));
   private static final Product PRODUCT = new Product(new ProductId(35455L));
   private static final LocalDateTime APPLICATION_DATE = LocalDateTime.of(2020, 6, 14, 10, 0);
   private static final Money AMOUNT = new Money(
@@ -56,9 +56,9 @@ class GetPriceInteractorTest {
     final Price price = new Price(
         BRAND,
         PRODUCT,
-        1,
         APPLICATION_DATE.minusHours(1),
         APPLICATION_DATE.plusHours(1),
+        1,
         10,
         AMOUNT);
 

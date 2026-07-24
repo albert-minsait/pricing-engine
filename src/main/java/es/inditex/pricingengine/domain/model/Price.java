@@ -40,11 +40,6 @@ public final class Price {
   private final Product product;
 
   /**
-   * Price list identifier.
-   */
-  private final Integer priceList;
-
-  /**
    * Start date of the validity period.
    */
   private final LocalDateTime startDate;
@@ -53,6 +48,11 @@ public final class Price {
    * End date of the validity period.
    */
   private final LocalDateTime endDate;
+
+  /**
+   * Price list identifier.
+   */
+  private final Integer priceList;
 
   /**
    * Priority used to resolve overlapping prices.
