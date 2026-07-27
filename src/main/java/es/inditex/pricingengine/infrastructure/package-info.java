@@ -8,8 +8,7 @@
  * Contains the infrastructure layer of the Pricing Engine.
  *
  * <p>
- * This layer provides the implementations required to integrate the
- * application with external systems and technologies.
+ * This layer provides the implementations required to integrate the application with external systems and technologies.
  * </p>
  *
  * @author Albert

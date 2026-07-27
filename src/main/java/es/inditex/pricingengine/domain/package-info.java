@@ -12,8 +12,7 @@
  * </p>
  *
  * <p>
- * The domain layer is independent of frameworks, persistence mechanisms and
- * infrastructure details.
+ * The domain layer is independent of frameworks, persistence mechanisms and infrastructure details.
  * </p>
  *
  * @author Albert

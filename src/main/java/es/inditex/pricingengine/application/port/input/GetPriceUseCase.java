@@ -5,10 +5,11 @@
  */
 package es.inditex.pricingengine.application.port.input;
 
+import java.time.LocalDateTime;
+
 import es.inditex.pricingengine.application.usecase.getprice.result.GetPriceResult;
 import es.inditex.pricingengine.domain.vo.BrandId;
 import es.inditex.pricingengine.domain.vo.ProductId;
-import java.time.LocalDateTime;
 
 /**
  * Defines the input port for retrieving an applicable product price.

@@ -8,6 +8,17 @@ package es.inditex.pricingengine.application.usecase.getprice;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
+import java.util.Currency;
+import java.util.Optional;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+
 import es.inditex.pricingengine.application.port.output.PriceRepository;
 import es.inditex.pricingengine.application.usecase.getprice.result.GetPriceResult;
 import es.inditex.pricingengine.domain.model.Brand;
@@ -16,15 +27,6 @@ import es.inditex.pricingengine.domain.model.Product;
 import es.inditex.pricingengine.domain.vo.BrandId;
 import es.inditex.pricingengine.domain.vo.Money;
 import es.inditex.pricingengine.domain.vo.ProductId;
-import java.math.BigDecimal;
-import java.time.LocalDateTime;
-import java.util.Currency;
-import java.util.Optional;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
 
 /**
  * Unit tests for {@link GetPriceInteractor}.
@@ -50,6 +52,9 @@ class GetPriceInteractorTest {
     getPriceInteractor = new GetPriceInteractor(priceRepository);
   }
 
+  /**
+   * Verifies that the use case returns the applicable price when exists.
+   */
   @Test
   void shouldReturnApplicablePriceWhenPriceExists() {
     // Given

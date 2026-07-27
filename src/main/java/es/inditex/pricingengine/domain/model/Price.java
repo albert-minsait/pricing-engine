@@ -5,23 +5,22 @@
  */
 package es.inditex.pricingengine.domain.model;
 
-import es.inditex.pricingengine.domain.vo.Money;
 import java.time.LocalDateTime;
+
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
+import es.inditex.pricingengine.domain.vo.Money;
+
 /**
- * Defines the price applied to a product for a specific brand and validity
- * period.
+ * Defines the price applied to a product for a specific brand and validity period.
  *
  * <p>
- * A price contains the tariff information, priority and monetary amount used
- * when calculating the final sale price.
+ * A price contains the tariff information, priority and monetary amount used when calculating the final sale price.
  * </p>
  *
  * <p>
- * When multiple prices are applicable for the same product and brand, the
- * highest priority price must be selected.
+ * When multiple prices are applicable for the same product and brand, the highest priority price must be selected.
  * </p>
  *
  * @author Albert

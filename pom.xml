@@ -25,12 +25,18 @@
   <!-- Project properties -->
   <!-- ========================================================================= -->
   <properties>
-    <java.version>21</java.version>
+    <!-- Encoding -->
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+    <!-- Java -->
+    <java.version>21</java.version>
+    <!-- Dependency versions -->
+    <checkstyle.version>13.8.0</checkstyle.version>
+    <springdoc.version>3.0.3</springdoc.version>
+    <!-- Plugin versions -->
     <spotless.plugin.version>3.8.0</spotless.plugin.version>
     <checkstyle.plugin.version>3.6.0</checkstyle.plugin.version>
-    <checkstyle.version>13.8.0</checkstyle.version>
+    <openapi-generator.plugin.version>7.24.0</openapi-generator.plugin.version>
   </properties>
 
   <!-- ========================================================================= -->
@@ -48,6 +54,10 @@
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-web</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-validation</artifactId>
     </dependency>
 
     <!-- Persistence -->
@@ -70,10 +80,22 @@
       <artifactId>spring-boot-starter-flyway</artifactId>
     </dependency>
 
+    <!-- Documentation -->
+    <dependency>
+      <groupId>org.springdoc</groupId>
+      <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+      <version>${springdoc.version}</version>
+    </dependency>
+
     <!-- Testing -->
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-test</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-resttestclient</artifactId>
       <scope>test</scope>
     </dependency>
     <dependency>
@@ -98,6 +120,9 @@
             <eclipse>
               <file>${project.basedir}/config/formatter.xml</file>
             </eclipse>
+            <importOrder>
+              <file>${project.basedir}/config/eclipse.importorder</file>
+            </importOrder>
             <removeUnusedImports/>
             <trimTrailingWhitespace/>
             <endWithNewline/>
@@ -108,11 +133,16 @@
           <formats>
             <format>
               <includes>
+                <include>.editorconfig</include>
                 <include>.gitattributes</include>
                 <include>.gitignore</include>
                 <include>**/*.md</include>
+                <include>**/*.xml</include>
                 <include>**/*.yaml</include>
               </includes>
+              <excludes>
+                <exclude>target/**</exclude>
+              </excludes>
               <trimTrailingWhitespace/>
               <endWithNewline/>
             </format>
@@ -135,6 +165,7 @@
         <version>${checkstyle.plugin.version}</version>
         <configuration>
           <configLocation>${project.basedir}/config/checkstyle.xml</configLocation>
+          <includeTestSourceDirectory>true</includeTestSourceDirectory>
           <consoleOutput>true</consoleOutput>
           <failOnViolation>true</failOnViolation>
         </configuration>
@@ -168,6 +199,48 @@
             </path>
           </annotationProcessorPaths>
         </configuration>
+      </plugin>
+
+      <!-- OpenAPI code generation -->
+      <plugin>
+        <groupId>org.openapitools</groupId>
+        <artifactId>openapi-generator-maven-plugin</artifactId>
+        <version>${openapi-generator.plugin.version}</version>
+        <executions>
+          <execution>
+            <id>generate-openapi</id>
+            <goals>
+              <goal>generate</goal>
+            </goals>
+            <phase>generate-sources</phase>
+            <configuration>
+              <inputSpec>${project.basedir}/src/main/resources/static/openapi/pricing-api.yaml</inputSpec>
+              <generatorName>spring</generatorName>
+              <apiPackage>es.inditex.pricingengine.infrastructure.inbound.rest.api</apiPackage>
+              <modelPackage>es.inditex.pricingengine.infrastructure.inbound.rest.model</modelPackage>
+              <generateApiDocumentation>false</generateApiDocumentation>
+              <generateApiTests>false</generateApiTests>
+              <generateModelDocumentation>false</generateModelDocumentation>
+              <generateModelTests>false</generateModelTests>
+              <generateSupportingFiles>true</generateSupportingFiles>
+              <supportingFilesToGenerate>ApiUtil.java</supportingFilesToGenerate>
+              <configOptions>
+                <!-- Generation strategy -->
+                <delegatePattern>true</delegatePattern>
+                <!-- Java types -->
+                <dateLibrary>java8-localdatetime</dateLibrary>
+                <!-- Model generation -->
+                <openApiNullable>false</openApiNullable>
+                <!-- Spring generation -->
+                <useSpringBoot4>true</useSpringBoot4>
+                <useJackson3>true</useJackson3>
+                <useTags>true</useTags>
+                <!-- Documentation -->
+                <documentationProvider>none</documentationProvider>
+              </configOptions>
+            </configuration>
+          </execution>
+        </executions>
       </plugin>
 
       <!-- Unit tests -->

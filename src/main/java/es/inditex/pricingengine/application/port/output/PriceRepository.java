@@ -5,11 +5,12 @@
  */
 package es.inditex.pricingengine.application.port.output;
 
+import java.time.LocalDateTime;
+import java.util.Optional;
+
 import es.inditex.pricingengine.domain.model.Price;
 import es.inditex.pricingengine.domain.vo.BrandId;
 import es.inditex.pricingengine.domain.vo.ProductId;
-import java.time.LocalDateTime;
-import java.util.Optional;
 
 /**
  * Defines the output port required to retrieve prices.
@@ -25,8 +26,8 @@ public interface PriceRepository {
    * Finds the applicable price for a product and brand.
    *
    * <p>
-   * When multiple prices match the criteria, the implementation must return
-   * the price selected according to the business priority rules.
+   * When multiple prices match the criteria, the implementation must return the price selected according to the
+   * business priority rules.
    * </p>
    *
    * @param brandId

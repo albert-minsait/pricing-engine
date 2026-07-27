@@ -9,6 +9,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
+
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.data.jpa.test.autoconfigure.DataJpaTest;
@@ -34,10 +35,10 @@ class PriceJpaRepositoryIT {
   @Test
   void shouldFindApplicablePriceAt1000OnJune14() {
     // Given
-    LocalDateTime applicationDate = LocalDateTime.of(2020, 6, 14, 10, 0);
+    final LocalDateTime applicationDate = LocalDateTime.of(2020, 6, 14, 10, 0);
 
     // When
-    PriceEntity price = findPrice(applicationDate);
+    final PriceEntity price = findPrice(applicationDate);
 
     // Then
     assertPrice(price, LocalDateTime.of(2020, 6, 14, 0, 0), LocalDateTime
@@ -50,10 +51,10 @@ class PriceJpaRepositoryIT {
   @Test
   void shouldFindApplicablePriceAt1600OnJune14() {
     // Given
-    LocalDateTime applicationDate = LocalDateTime.of(2020, 6, 14, 16, 0);
+    final LocalDateTime applicationDate = LocalDateTime.of(2020, 6, 14, 16, 0);
 
     // When
-    PriceEntity price = findPrice(applicationDate);
+    final PriceEntity price = findPrice(applicationDate);
 
     // Then
     assertPrice(price, LocalDateTime.of(2020, 6, 14, 15, 0), LocalDateTime
@@ -66,10 +67,10 @@ class PriceJpaRepositoryIT {
   @Test
   void shouldFindApplicablePriceAt2100OnJune14() {
     // Given
-    LocalDateTime applicationDate = LocalDateTime.of(2020, 6, 14, 21, 0);
+    final LocalDateTime applicationDate = LocalDateTime.of(2020, 6, 14, 21, 0);
 
     // When
-    PriceEntity price = findPrice(applicationDate);
+    final PriceEntity price = findPrice(applicationDate);
 
     // Then
     assertPrice(price, LocalDateTime.of(2020, 6, 14, 0, 0), LocalDateTime
@@ -82,10 +83,10 @@ class PriceJpaRepositoryIT {
   @Test
   void shouldFindApplicablePriceAt1000OnJune15() {
     // Given
-    LocalDateTime applicationDate = LocalDateTime.of(2020, 6, 15, 10, 0);
+    final LocalDateTime applicationDate = LocalDateTime.of(2020, 6, 15, 10, 0);
 
     // When
-    PriceEntity price = findPrice(applicationDate);
+    final PriceEntity price = findPrice(applicationDate);
 
     // Then
     assertPrice(price, LocalDateTime.of(2020, 6, 15, 0, 0), LocalDateTime.of(2020, 6, 15, 11, 0), 3, 1, "30.50", "EUR");
@@ -97,10 +98,10 @@ class PriceJpaRepositoryIT {
   @Test
   void shouldFindApplicablePriceAt2100OnJune16() {
     // Given
-    LocalDateTime applicationDate = LocalDateTime.of(2020, 6, 16, 21, 0);
+    final LocalDateTime applicationDate = LocalDateTime.of(2020, 6, 16, 21, 0);
 
     // When
-    PriceEntity price = findPrice(applicationDate);
+    final PriceEntity price = findPrice(applicationDate);
 
     // Then
     assertPrice(price, LocalDateTime.of(2020, 6, 15, 16, 0), LocalDateTime
@@ -113,11 +114,14 @@ class PriceJpaRepositoryIT {
   @Test
   void shouldReturnEmptyWhenNoApplicablePriceExists() {
     // Given
-    LocalDateTime applicationDate = LocalDateTime.of(2021, 1, 1, 0, 0);
+    final LocalDateTime applicationDate = LocalDateTime.of(2021, 1, 1, 0, 0);
 
     // When
-    Optional<PriceEntity> price = priceJpaRepository
-        .findFirstByBrandIdAndProductIdAndStartDateLessThanEqualAndEndDateGreaterThanEqualOrderByPriorityDesc(BRAND_ID, PRODUCT_ID, applicationDate, applicationDate);
+    // @formatter:off
+    final Optional<PriceEntity> price = priceJpaRepository
+        .findFirstByBrandIdAndProductIdAndStartDateLessThanEqualAndEndDateGreaterThanEqualOrderByPriorityDesc(
+            BRAND_ID, PRODUCT_ID, applicationDate, applicationDate);
+    // @formatter:on
 
     // Then
     assertThat(price).isEmpty();
@@ -128,11 +132,15 @@ class PriceJpaRepositoryIT {
    *
    * @param applicationDate
    *                          the application date
+   *
    * @return the matching price
    */
   private PriceEntity findPrice(LocalDateTime applicationDate) {
-    Optional<PriceEntity> result = priceJpaRepository
-        .findFirstByBrandIdAndProductIdAndStartDateLessThanEqualAndEndDateGreaterThanEqualOrderByPriorityDesc(BRAND_ID, PRODUCT_ID, applicationDate, applicationDate);
+    // @formatter:off
+    final Optional<PriceEntity> result = priceJpaRepository
+        .findFirstByBrandIdAndProductIdAndStartDateLessThanEqualAndEndDateGreaterThanEqualOrderByPriorityDesc(
+            BRAND_ID, PRODUCT_ID, applicationDate, applicationDate);
+    // @formatter:on
 
     assertThat(result).isPresent();
 
@@ -157,7 +165,11 @@ class PriceJpaRepositoryIT {
    * @param currency
    *                    the expected currency
    */
-  private void assertPrice(PriceEntity price, LocalDateTime startDate, LocalDateTime endDate, Integer priceList, Integer priority, String amount, String currency) {
+  // @formatter:off
+  private void assertPrice(
+      PriceEntity price, LocalDateTime startDate, LocalDateTime endDate,
+      Integer priceList, Integer priority, String amount, String currency) {
+    // @formatter:on
     assertThat(price.getBrandId()).isEqualTo(BRAND_ID);
     assertThat(price.getProductId()).isEqualTo(PRODUCT_ID);
     assertThat(price.getStartDate()).isEqualTo(startDate);

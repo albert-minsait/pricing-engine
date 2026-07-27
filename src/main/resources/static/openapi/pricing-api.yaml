@@ -1,0 +1,173 @@
+openapi: 3.0.4
+
+info:
+  title: Pricing Engine API
+  description: REST API for product pricing.
+  version: 1.0.0
+
+servers:
+  - url: /api
+
+tags:
+  - name: Prices
+    description: Product pricing operations.
+
+paths:
+  /prices:
+    get:
+      tags:
+        - Prices
+      operationId: getApplicablePrice
+      summary: Get the applicable price
+      description: >
+        Returns the applicable price for the specified brand, product and application date. If multiple prices are valid
+        for the requested date, the one with the highest priority is returned.
+      parameters:
+        - name: brandId
+          in: query
+          description: Brand identifier used to determine the applicable price.
+          required: true
+          schema:
+            type: integer
+            format: int64
+            minimum: 1
+            example: 1
+        - name: productId
+          in: query
+          description: Product identifier used to determine the applicable price.
+          required: true
+          schema:
+            type: integer
+            format: int64
+            minimum: 1
+            example: 35455
+        - name: applicationDate
+          in: query
+          description: Date and time for which the applicable price is requested.
+          required: true
+          schema:
+            type: string
+            format: date-time
+            example: "2020-06-14T10:00:00"
+      responses:
+        '200':
+          description: Applicable price found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PriceResponse'
+        '400':
+          description: Invalid request parameters.
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetail'
+              example:
+                type: "urn:problem-type:pricing:invalid-request"
+                title: "Invalid Request"
+                status: 400
+                detail: "Parameter 'brandId' must be greater than or equal to 1"
+                instance: "/api/prices?brandId=0&productId=35455&applicationDate=2020-06-14T10:00:00"
+        '404':
+          description: No applicable price found.
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetail'
+              example:
+                type: "urn:problem-type:pricing:price-not-found"
+                title: "Price Not Found"
+                status: 404
+                detail: "No applicable price found for brandId=1, productId=35455, applicationDate=2021-01-01T10:00"
+                instance: "/api/prices?brandId=1&productId=35455&applicationDate=2021-01-01T10:00:00"
+        '500':
+          description: Unexpected error while processing the request.
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetail'
+              example:
+                type: "urn:problem-type:pricing:unexpected-error"
+                title: "Unexpected Error"
+                status: 500
+                detail: "An unexpected error occurred"
+                instance: "/api/prices?brandId=1&productId=35455&applicationDate=2020-06-14T10:00:00"
+
+components:
+  schemas:
+    PriceResponse:
+      type: object
+      description: Applicable price returned for the specified brand, product and application date.
+      required:
+        - brandId
+        - productId
+        - startDate
+        - endDate
+        - priceList
+        - price
+        - currency
+      properties:
+        brandId:
+          type: integer
+          format: int64
+          description: Brand identifier.
+          example: 1
+        productId:
+          type: integer
+          format: int64
+          description: Product identifier.
+          example: 35455
+        startDate:
+          type: string
+          format: date-time
+          description: Start date of the validity period.
+          example: "2020-06-14T00:00:00"
+        endDate:
+          type: string
+          format: date-time
+          description: End date of the validity period.
+          example: "2020-12-31T23:59:59"
+        priceList:
+          type: integer
+          format: int32
+          description: Price list identifier.
+          example: 1
+        price:
+          type: number
+          multipleOf: 0.01
+          description: Price amount.
+          example: 35.50
+        currency:
+          type: string
+          minLength: 3
+          maxLength: 3
+          description: ISO 4217 currency code.
+          example: EUR
+    ProblemDetail:
+      type: object
+      description: RFC 9457 Problem Details object describing an error response.
+      required:
+        - type
+        - title
+        - status
+        - detail
+        - instance
+      properties:
+        type:
+          type: string
+          format: uri-reference
+          description: URN identifying the problem type.
+        title:
+          type: string
+          description: Short human-readable summary of the problem.
+        status:
+          type: integer
+          format: int32
+          description: HTTP status code.
+        detail:
+          type: string
+          description: Human-readable explanation specific to this occurrence of the problem.
+        instance:
+          type: string
+          format: uri
+          description: URI identifying the specific request that caused the problem.

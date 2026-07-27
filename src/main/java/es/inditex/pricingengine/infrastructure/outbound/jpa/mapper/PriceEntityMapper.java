@@ -5,6 +5,10 @@
  */
 package es.inditex.pricingengine.infrastructure.outbound.jpa.mapper;
 
+import java.util.Currency;
+
+import org.springframework.stereotype.Component;
+
 import es.inditex.pricingengine.domain.model.Brand;
 import es.inditex.pricingengine.domain.model.Price;
 import es.inditex.pricingengine.domain.model.Product;
@@ -12,8 +16,6 @@ import es.inditex.pricingengine.domain.vo.BrandId;
 import es.inditex.pricingengine.domain.vo.Money;
 import es.inditex.pricingengine.domain.vo.ProductId;
 import es.inditex.pricingengine.infrastructure.outbound.jpa.entity.PriceEntity;
-import java.util.Currency;
-import org.springframework.stereotype.Component;
 
 /**
  * Maps price entities to domain prices.
@@ -21,7 +23,7 @@ import org.springframework.stereotype.Component;
  * @author Albert
  */
 @Component
-public final class PriceEntityMapper {
+public class PriceEntityMapper {
   /**
    * Maps a price entity to a domain price.
    *

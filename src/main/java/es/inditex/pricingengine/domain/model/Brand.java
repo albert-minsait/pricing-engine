@@ -5,9 +5,10 @@
  */
 package es.inditex.pricingengine.domain.model;
 
-import es.inditex.pricingengine.domain.vo.BrandId;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+
+import es.inditex.pricingengine.domain.vo.BrandId;
 
 /**
  * Identifies a commercial brand in the domain.

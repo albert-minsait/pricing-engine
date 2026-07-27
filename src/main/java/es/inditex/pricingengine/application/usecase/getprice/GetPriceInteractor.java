@@ -5,20 +5,26 @@
  */
 package es.inditex.pricingengine.application.usecase.getprice;
 
+import java.time.LocalDateTime;
+
+import org.springframework.stereotype.Service;
+
+import lombok.RequiredArgsConstructor;
+
+import es.inditex.pricingengine.application.exception.PriceNotFoundException;
 import es.inditex.pricingengine.application.port.input.GetPriceUseCase;
 import es.inditex.pricingengine.application.port.output.PriceRepository;
 import es.inditex.pricingengine.application.usecase.getprice.result.GetPriceResult;
 import es.inditex.pricingengine.domain.model.Price;
 import es.inditex.pricingengine.domain.vo.BrandId;
 import es.inditex.pricingengine.domain.vo.ProductId;
-import java.time.LocalDateTime;
-import lombok.RequiredArgsConstructor;
 
 /**
  * Implements the get price use case.
  *
  * @author Albert
  */
+@Service
 @RequiredArgsConstructor
 public class GetPriceInteractor implements GetPriceUseCase {
   private final PriceRepository priceRepository;
@@ -29,14 +35,14 @@ public class GetPriceInteractor implements GetPriceUseCase {
   @Override
   public GetPriceResult getPrice(BrandId brandId, ProductId productId, LocalDateTime applicationDate) {
     final Price price = priceRepository.findApplicablePrice(brandId, productId, applicationDate)
-        .orElseThrow();
+        .orElseThrow(() -> new PriceNotFoundException(brandId, productId, applicationDate));
 
     return new GetPriceResult(
         price.getBrand().getId(),
         price.getProduct().getId(),
-        price.getPriceList(),
         price.getStartDate(),
         price.getEndDate(),
+        price.getPriceList(),
         price.getAmount());
   }
 }

@@ -16,6 +16,11 @@ spring:
   flyway:
     enabled: true
 
+springdoc:
+  swagger-ui:
+    path: /swagger-ui
+    url: /openapi/pricing-api.yaml
+
 logging:
   level:
     root: INFO
