@@ -20,6 +20,8 @@ application.
   - [Application Layer](#application-layer)
     - [Application Layer Decisions](#application-layer-decisions)
   - [Infrastructure Layer](#infrastructure-layer)
+    - [Observability](#observability)
+      - [Observability Decisions](#observability-decisions)
     - [Inbound REST Adapter](#inbound-rest-adapter)
       - [Inbound REST Adapter Decisions](#inbound-rest-adapter-decisions)
     - [Outbound JPA Adapter](#outbound-jpa-adapter)
@@ -92,6 +94,8 @@ Packages are organized by architectural layer, adapter direction and technology.
 | Application | `application.port.output` | Output ports required by the application layer. |
 | Application | `application.usecase.<capability>` | Application use case implementations grouped by business capability. |
 | Application | `application.exception` | Application layer exceptions. |
+| Infrastructure | `infrastructure.aspect` | Cross-cutting concerns implemented using Spring AOP. |
+| Infrastructure | `infrastructure.inbound.rest.filter` | HTTP request filters for REST requests. |
 | Infrastructure | `infrastructure.inbound.rest.api` | OpenAPI-generated server interfaces and controller. |
 | Infrastructure | `infrastructure.inbound.rest.adapter` | REST inbound adapter implementations. |
 | Infrastructure | `infrastructure.inbound.rest.mapper` | REST model mappers. |
@@ -110,10 +114,12 @@ Packages are organized by architectural layer, adapter direction and technology.
 | Application | `Interactor` | Application use case implementation. | `GetPriceInteractor` |
 | Application | `Result` | Use case-specific result model. | `GetPriceResult` |
 | Application | `Repository` | Application output port. | `PriceRepository` |
+| Infrastructure | `Aspect` | Cross-cutting concerns implemented using Spring AOP. | `ExecutionLoggingAspect` |
+| Infrastructure | `Filter` | HTTP request preprocessing and context propagation. | `RequestCorrelationFilter` |
 | Infrastructure | `Api`, `ApiController`, `ApiDelegate` | OpenAPI-generated server types. | `PricesApi`, `PricesApiController`, `PricesApiDelegate` |
 | Infrastructure | `Adapter` | Infrastructure adapter implementations. | `PriceRestAdapter`, `PriceRepositoryAdapter` |
 | Infrastructure | `Mapper` | Converts models between architectural layers. | `PriceRestMapper`, `PriceEntityMapper` |
-| Infrastructure | `Handler` | Handles REST exceptions and cross-cutting concerns. | `RestExceptionHandler` |
+| Infrastructure | `Handler` | REST exception handler. | `RestExceptionHandler` |
 | Infrastructure | `Response` | OpenAPI-generated response model. | `PriceResponse` |
 | Infrastructure | `Entity` | JPA persistence model. | `PriceEntity` |
 
@@ -242,6 +248,38 @@ that connect the application to frameworks, databases, external systems, and oth
 This layer groups its components into inbound and outbound adapters, keeping the domain and application layers isolated
 from framework-specific concerns while allowing each integration to evolve independently.
 
+#### Observability
+
+The service implements observability using Spring AOP and HTTP request filters to provide consistent
+execution logging and request correlation across the application.
+
+Cross-cutting concerns are isolated from the business logic and infrastructure adapters, allowing each
+component to focus on its primary responsibility.
+
+Current observability structure:
+
+```text
+infrastructure
+├── aspect
+│   └── ExecutionLoggingAspect.java
+└── inbound
+    └── rest
+        └── filter
+            └── RequestCorrelationFilter.java
+```
+
+##### Observability Decisions
+
+- Cross-cutting concerns are implemented using Spring AOP.
+- HTTP request filters perform request preprocessing and context propagation.
+- Execution logging is implemented using an aspect to avoid scattering logging logic across the
+  application.
+- Request correlation is implemented using the `X-Correlation-Id` HTTP header.
+- Incoming correlation identifiers are propagated when present; otherwise a new identifier is
+  generated.
+- Correlation identifiers are stored in the SLF4J MDC to automatically enrich log entries.
+- Application components remain independent of the observability infrastructure.
+
 #### Inbound REST Adapter
 
 The inbound REST adapter exposes the pricing use case through a REST API.
@@ -252,6 +290,8 @@ contract.
 During the build, OpenAPI Generator produces the server API interface, controller, delegate interface and API models.
 The inbound adapter implements the generated delegate interface, maps API requests to the application layer and
 transforms application responses into the generated API models.
+
+HTTP request filters perform request preprocessing before delegating execution to the generated API infrastructure.
 
 Current inbound REST adapter structure:
 
@@ -266,6 +306,8 @@ infrastructure
         │   ├── PricesApi.java (generated)
         │   ├── PricesApiController.java (generated)
         │   └── PricesApiDelegate.java (generated)
+        ├── filter
+        │   └── RequestCorrelationFilter.java
         ├── handler
         │   └── RestExceptionHandler.java
         ├── mapper
@@ -279,15 +321,16 @@ infrastructure
 
 - The REST API follows an API-first approach.
 - The OpenAPI specification is the single source of truth for the API contract.
-- OpenAPI Generator generates the server API interface, controller, delegate interface and API models during the
-  build.
+- OpenAPI Generator generates the server API interface, controller, delegate interface and API models during the build.
 - The inbound REST adapter contains no business logic and delegates use case execution to the application layer.
-- The delegate pattern is used to keep the REST API infrastructure generated while allowing the inbound adapter
-  implementation to remain independent of the generated code.
+- The delegate pattern keeps the REST API infrastructure generated while allowing the inbound adapter implementation
+  to remain independent of the generated code.
+- HTTP request filters implement request preprocessing and context propagation independently of the REST adapter
+  implementation.
 - Dedicated mappers translate between generated API models and application models.
 - Date and time values are represented using `LocalDateTime` because the provided data model stores timestamps without
   time zone information. Time zone handling is outside the scope of this exercise.
-- Error responses follow RFC 9457 (Problem Details for HTTP APIs) standard, providing consistent and standardized error
+- Error responses follow RFC 9457 (Problem Details for HTTP APIs), providing consistent and standardized error
   handling across the API.
 
 #### Outbound JPA Adapter

@@ -24,4 +24,4 @@ springdoc:
 logging:
   level:
     root: INFO
-    es.inditex.pricingengine: INFO
+    es.inditex.pricingengine: TRACE

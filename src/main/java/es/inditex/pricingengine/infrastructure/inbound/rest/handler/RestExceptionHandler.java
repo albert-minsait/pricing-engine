@@ -20,6 +20,8 @@ import org.springframework.web.method.annotation.HandlerMethodValidationExceptio
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import lombok.extern.slf4j.Slf4j;
+
 import es.inditex.pricingengine.application.exception.PriceNotFoundException;
 
 /**
@@ -28,6 +30,7 @@ import es.inditex.pricingengine.application.exception.PriceNotFoundException;
  * @author Albert
  */
 @RestControllerAdvice
+@Slf4j
 public class RestExceptionHandler {
   /** Maximum number of validation errors aggregated into the response detail. */
   private static final long MAX_AGGREGATED_ERRORS = 5L;
@@ -125,6 +128,8 @@ public class RestExceptionHandler {
    */
   @ExceptionHandler(Exception.class)
   public ProblemDetail handleGenericException(Exception ex) {
+    log.error("Unexpected error while processing request", ex);
+
     final ProblemDetail problemDetail = ProblemDetail
         .forStatusAndDetail(HttpStatus.INTERNAL_SERVER_ERROR, "An unexpected error occurred");
     problemDetail.setType(UNEXPECTED_ERROR_TYPE);

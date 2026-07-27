@@ -97,15 +97,19 @@ Further details about the API-first approach and the REST adapter implementation
 
 ## Technologies
 
+## Technologies
+
 | Category | Technologies |
 | --- | --- |
+| Language | Java 21 |
 | Build | Maven |
 | Framework | Spring Boot |
 | Web | Spring Web, Bean Validation |
 | API | OpenAPI 3.0, OpenAPI Generator, Swagger UI |
 | Persistence | Jakarta Persistence, Spring Data JPA, H2, Flyway |
+| Logging | SLF4J, Logback |
 | Testing | Spring Boot Test, JUnit 5, AssertJ, Mockito |
-| Development Tools | Lombok |
+| Development Tools | Lombok, Spring AOP |
 | Code Formatting | Spotless (Eclipse JDT Formatter) |
 | Code Quality | Checkstyle |
 
@@ -134,7 +138,8 @@ Further details about the API-first approach and the REST adapter implementation
 │   │       ├── static
 │   │       │   └── openapi
 │   │       │       └── pricing-api.yaml
-│   │       └── application.yaml
+│   │       ├── application.yaml
+│   │       └── logback-spring.xml
 │   └── test
 │       └── java
 │           └── es.inditex.pricingengine
