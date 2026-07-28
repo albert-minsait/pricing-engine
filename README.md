@@ -46,8 +46,9 @@ exercise.
 - The project is organized as a single Maven module because the current size of the codebase does not justify a
   multi-module build.
 - H2 is used as an embedded database for simplicity. In a production environment, a database supporting exclusion
-  constraints (for example, PostgreSQL) would be preferable to enforce the domain invariant that no overlapping prices
-  with the same brand, product and priority can exist. For this reason, additional ordering criteria in the repository
+  constraints (for example, PostgreSQL) would be preferable to enforce the domain invariant that prices with the same
+  brand, product, price list and priority cannot have overlapping validity periods. This would eliminate the
+  possibility of non-deterministic query results. For this reason, additional ordering criteria in the repository
   query have intentionally not been introduced as a workaround.
 
 ### Implementation
