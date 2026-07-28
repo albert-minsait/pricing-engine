@@ -6,6 +6,7 @@
 package es.inditex.pricingengine.infrastructure.inbound.rest.handler;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.mockStatic;
@@ -61,9 +62,7 @@ class RestExceptionHandlerTest {
     final ServletUriComponentsBuilder mockBuilder = createMockServletUriComponentsBuilder(uri);
     try (
         final MockedStatic<ServletUriComponentsBuilder> mockedBuilder = mockStatic(ServletUriComponentsBuilder.class)) {
-      mockedBuilder
-          .when(() -> ServletUriComponentsBuilder.fromCurrentRequest())
-          .thenReturn(mockBuilder);
+      mockedBuilder.when(ServletUriComponentsBuilder::fromCurrentRequest).thenReturn(mockBuilder);
 
       // When
       final ProblemDetail problem = handler.handleInvalidRequestException(ex);
@@ -90,9 +89,7 @@ class RestExceptionHandlerTest {
     final ServletUriComponentsBuilder mockBuilder = createMockServletUriComponentsBuilder(uri);
     try (
         final MockedStatic<ServletUriComponentsBuilder> mockedBuilder = mockStatic(ServletUriComponentsBuilder.class)) {
-      mockedBuilder
-          .when(() -> ServletUriComponentsBuilder.fromCurrentRequest())
-          .thenReturn(mockBuilder);
+      mockedBuilder.when(ServletUriComponentsBuilder::fromCurrentRequest).thenReturn(mockBuilder);
 
       // When
       final ProblemDetail problem = handler.handleInvalidRequestException(ex);
@@ -121,9 +118,7 @@ class RestExceptionHandlerTest {
     doReturn(Set.of(violation)).when(ex).getConstraintViolations();
     try (
         final MockedStatic<ServletUriComponentsBuilder> mockedBuilder = mockStatic(ServletUriComponentsBuilder.class)) {
-      mockedBuilder
-          .when(() -> ServletUriComponentsBuilder.fromCurrentRequest())
-          .thenReturn(mockBuilder);
+      mockedBuilder.when(ServletUriComponentsBuilder::fromCurrentRequest).thenReturn(mockBuilder);
 
       // When
       final ProblemDetail problem = handler.handleInvalidRequestException(ex);
@@ -152,9 +147,7 @@ class RestExceptionHandlerTest {
     doReturn(allErrors).when(ex).getAllErrors();
     try (
         final MockedStatic<ServletUriComponentsBuilder> mockedBuilder = mockStatic(ServletUriComponentsBuilder.class)) {
-      mockedBuilder
-          .when(() -> ServletUriComponentsBuilder.fromCurrentRequest())
-          .thenReturn(mockBuilder);
+      mockedBuilder.when(ServletUriComponentsBuilder::fromCurrentRequest).thenReturn(mockBuilder);
 
       // When
       final ProblemDetail problem = handler.handleInvalidRequestException(ex);
@@ -167,6 +160,20 @@ class RestExceptionHandlerTest {
       assertThat(problem.getDetail()).contains("must be greater than or equal to 1");
       assertThat(problem.getInstance()).isEqualTo(uri);
     }
+  }
+
+  /**
+   * Verifies that an unsupported exception type throws an illegal state exception.
+   */
+  @Test
+  void shouldThrowIllegalStateExceptionForUnsupportedException() {
+    // Given
+    final Exception ex = new Exception("Unexpected error");
+
+    // When / Then
+    assertThatThrownBy(() -> handler.handleInvalidRequestException(ex))
+        .isInstanceOf(IllegalStateException.class)
+        .hasMessage("Unsupported exception: java.lang.Exception");
   }
 
   /**
@@ -183,9 +190,7 @@ class RestExceptionHandlerTest {
     final ServletUriComponentsBuilder mockBuilder = createMockServletUriComponentsBuilder(uri);
     try (
         final MockedStatic<ServletUriComponentsBuilder> mockedBuilder = mockStatic(ServletUriComponentsBuilder.class)) {
-      mockedBuilder
-          .when(() -> ServletUriComponentsBuilder.fromCurrentRequest())
-          .thenReturn(mockBuilder);
+      mockedBuilder.when(ServletUriComponentsBuilder::fromCurrentRequest).thenReturn(mockBuilder);
 
       // When
       final ProblemDetail problem = handler.handlePriceNotFoundException(ex);
@@ -212,9 +217,7 @@ class RestExceptionHandlerTest {
     final ServletUriComponentsBuilder mockBuilder = createMockServletUriComponentsBuilder(uri);
     try (
         final MockedStatic<ServletUriComponentsBuilder> mockedBuilder = mockStatic(ServletUriComponentsBuilder.class)) {
-      mockedBuilder
-          .when(() -> ServletUriComponentsBuilder.fromCurrentRequest())
-          .thenReturn(mockBuilder);
+      mockedBuilder.when(ServletUriComponentsBuilder::fromCurrentRequest).thenReturn(mockBuilder);
 
       // When
       final ProblemDetail problem = handler.handleGenericException(ex);

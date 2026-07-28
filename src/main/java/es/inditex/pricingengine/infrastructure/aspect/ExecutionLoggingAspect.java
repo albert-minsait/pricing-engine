@@ -106,25 +106,15 @@ public class ExecutionLoggingAspect {
     final Signature signature = joinPoint.getSignature();
     final String operation = signature.getDeclaringType().getSimpleName() + "." + signature.getName();
 
-    if (log.isInfoEnabled()) {
-      log.info("[{}] Starting {} with arguments={}", layer, operation, Arrays.deepToString(joinPoint.getArgs()));
-    }
-
-    if (log.isDebugEnabled()) {
-      log.debug("[{}] Signature={}", layer, signature.toLongString());
-    }
+    log.atInfo().log("[{}] Starting {} with arguments={}", layer, operation, Arrays.deepToString(joinPoint.getArgs()));
+    log.atDebug().log("[{}] Signature={}", layer, signature.toLongString());
 
     final long startTime = System.nanoTime();
     final Object result = joinPoint.proceed();
     final long elapsedMillis = TimeUnit.NANOSECONDS.toMillis(System.nanoTime() - startTime);
 
-    if (log.isTraceEnabled()) {
-      log.trace("[{}] Returned {}", layer, Objects.toString(result));
-    }
-
-    if (log.isInfoEnabled()) {
-      log.info("[{}] Completed {} in {} ms", layer, operation, elapsedMillis);
-    }
+    log.atTrace().log("[{}] Returned {}", layer, Objects.toString(result));
+    log.atInfo().log("[{}] Completed {} in {} ms", layer, operation, elapsedMillis);
 
     return result;
   }
