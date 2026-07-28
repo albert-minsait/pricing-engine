@@ -8,6 +8,11 @@ brand identifier and product identifier.
 ## Table of Contents
 
 - [Requirements](#requirements)
+- [Project Scope](#project-scope)
+  - [Purpose](#purpose)
+  - [Architecture](#architecture)
+  - [Implementation](#implementation)
+  - [Out of Scope](#out-of-scope)
 - [Getting Started](#getting-started)
   - [Format](#format)
   - [Build](#build)
@@ -23,6 +28,45 @@ brand identifier and product identifier.
 
 - Java 21
 - Maven 3.9+
+
+## Project Scope
+
+### Purpose
+
+This project has been developed as a technical assessment and intentionally focuses on the requested requirements.
+
+Although the architecture is more elaborate than strictly necessary for the problem being solved, it has been designed
+to demonstrate software architecture principles, code organization and engineering practices within the scope of the
+exercise.
+
+### Architecture
+
+- The architecture follows Clean Architecture and Domain-Driven Design principles to demonstrate software
+  architecture principles and separation of concerns.
+- The project is organized as a single Maven module because the current size of the codebase does not justify a
+  multi-module build.
+- H2 is used as an embedded database for simplicity. In a production environment, a database supporting exclusion
+  constraints (for example, PostgreSQL) would be preferable to enforce the domain invariant that no overlapping prices
+  with the same brand, product and priority can exist. For this reason, additional ordering criteria in the repository
+  query have intentionally not been introduced as a workaround.
+
+### Implementation
+
+- `package-info.java` files are provided only up to the packages that define the architectural layers in the main
+  source set, where package-level documentation helps describe the architecture while avoiding unnecessary
+  documentation in implementation-specific packages.
+- MapStruct or similar is intentionally not used because the required mappings are simple and manually implemented.
+
+### Out of Scope
+
+The following concerns have intentionally been left outside the scope of this technical assessment:
+
+- Native compilation support.
+- Security.
+- CI/CD and release automation.
+- Containerization.
+- Cloud deployment and infrastructure provisioning.
+- Observability.
 
 ## Getting Started
 
@@ -97,8 +141,6 @@ Further details about the API-first approach and the REST adapter implementation
 
 ## Technologies
 
-## Technologies
-
 | Category | Technologies |
 | --- | --- |
 | Language | Java 21 |
@@ -112,6 +154,7 @@ Further details about the API-first approach and the REST adapter implementation
 | Development Tools | Lombok, Spring AOP |
 | Code Formatting | Spotless (Eclipse JDT Formatter) |
 | Code Quality | Checkstyle |
+| Code Coverage | JaCoCo |
 
 ## Project Structure
 
@@ -147,6 +190,7 @@ Further details about the API-first approach and the REST adapter implementation
 ├── .editorconfig
 ├── .gitattributes
 ├── .gitignore
+├── LICENSE
 ├── README.md
 ├── mvnw
 ├── mvnw.cmd
@@ -159,7 +203,7 @@ Additional project documentation is available under the `docs` directory.
 
 | Document | Description |
 | --- | --- |
-| `ARCHITECTURE.md` | Architectural style, domain boundaries, naming conventions, layer organization and design decisions. |
+| [`ARCHITECTURE.md`](docs/ARCHITECTURE.md) | Architectural style, domain boundaries, naming conventions, layer organization and design decisions. |
 
 ## License
 

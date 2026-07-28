@@ -1,10 +1,8 @@
 # Architecture
 
-This document describes the architectural principles, project organization and design decisions adopted by the Pricing
-Engine.
+This document describes the architectural principles, project organization and design decisions adopted by the Pricing Engine.
 
-It complements the information provided in the project `README.md` by documenting the internal structure of the
-application.
+It complements the information provided in the project `README.md` by documenting the internal structure of the application.
 
 ## Table of Contents
 
@@ -47,9 +45,9 @@ The Pricing bounded context owns only pricing information and therefore persists
 `brand_id` and `product_id` fields are treated as references to external domain concepts instead of entities owned by
 the service.
 
-In a real-world distributed architecture, Brand and Product would typically be implemented as independent services, each
-one owning its own bounded context, business rules and persistence model. Those services could expose REST APIs for
-synchronous queries and publish domain events whenever their master data changes.
+In a real-world distributed architecture, Brand and Product would typically be implemented as independent services,
+each one owning its own bounded context, business rules and persistence model. Those services could expose REST APIs
+for synchronous queries and publish domain events whenever their master data changes.
 
 ```text
                 +-----------------+
@@ -74,8 +72,8 @@ synchronous queries and publish domain events whenever their master data changes
 This design allows Brand and Product to evolve independently while the Pricing Engine remains focused exclusively on
 pricing rules and price determination.
 
-The approach preserves clear ownership boundaries, avoids unnecessary duplication of master data across bounded contexts
-and keeps the service focused on its business responsibility.
+The approach preserves clear ownership boundaries, avoids unnecessary duplication of master data across bounded
+contexts and keeps the service focused on its business responsibility.
 
 ## Naming Conventions
 
@@ -123,9 +121,9 @@ Packages are organized by architectural layer, adapter direction and technology.
 | Infrastructure | `Response` | OpenAPI-generated response model. | `PriceResponse` |
 | Infrastructure | `Entity` | JPA persistence model. | `PriceEntity` |
 
-**Note:** OpenAPI Generator also generates supporting API models, such as `ProblemDetail`, defined by the
-OpenAPI specification. These types are omitted from the table because they are generated rather than
-project-specific naming conventions.
+**Note:** OpenAPI Generator also generates supporting API models, such as `ProblemDetail`, defined by the OpenAPI
+specification. These types are omitted from the table because they are generated rather than project-specific naming
+conventions.
 
 > **Naming guideline**
 >
@@ -165,7 +163,7 @@ The domain layer contains the core business concepts and business rules of the P
 
 This layer is completely independent of frameworks, persistence mechanisms and external technologies.
 
-Current domain model:
+Current domain structure:
 
 ```text
 domain
@@ -235,7 +233,7 @@ application
 - The application layer orchestrates use cases by coordinating domain operations. It does not contain domain business
   rules, persistence logic or framework-specific concerns.
 - The application layer raises domain-specific exceptions for business-level conditions that occur during use case
-  execution (not for domain rule violations). These exceptions encapsulate business context enabling upstream adapters
+  execution (not for domain rule violations). These exceptions encapsulate business context, enabling upstream adapters
   to provide meaningful, context-aware error responses. Example: `PriceNotFoundException` represents the business
   condition "no applicable price found for the given criteria", carrying the search parameters (brand, product,
   application date) for error reporting.
@@ -250,11 +248,11 @@ from framework-specific concerns while allowing each integration to evolve indep
 
 #### Observability
 
-The service implements observability using Spring AOP and HTTP request filters to provide consistent
-execution logging and request correlation across the application.
+The service implements observability using Spring AOP and HTTP request filters to provide consistent execution logging
+and request correlation across the application.
 
-Cross-cutting concerns are isolated from the business logic and infrastructure adapters, allowing each
-component to focus on its primary responsibility.
+Cross-cutting concerns are isolated from the business logic and infrastructure adapters, allowing each component to
+focus on its primary responsibility.
 
 Current observability structure:
 
@@ -272,11 +270,9 @@ infrastructure
 
 - Cross-cutting concerns are implemented using Spring AOP.
 - HTTP request filters perform request preprocessing and context propagation.
-- Execution logging is implemented using an aspect to avoid scattering logging logic across the
-  application.
+- Execution logging is implemented using an aspect to avoid scattering logging logic across the application.
 - Request correlation is implemented using the `X-Correlation-Id` HTTP header.
-- Incoming correlation identifiers are propagated when present; otherwise a new identifier is
-  generated.
+- Incoming correlation identifiers are propagated when present; otherwise a new identifier is generated.
 - Correlation identifiers are stored in the SLF4J MDC to automatically enrich log entries.
 - Application components remain independent of the observability infrastructure.
 
@@ -288,7 +284,7 @@ The service follows an API-first approach. The OpenAPI specification is the sing
 contract.
 
 During the build, OpenAPI Generator produces the server API interface, controller, delegate interface and API models.
-The inbound adapter implements the generated delegate interface, maps API requests to the application layer and
+The inbound adapter implements the generated delegate interface, maps API requests to the application layer, and
 transforms application responses into the generated API models.
 
 HTTP request filters perform request preprocessing before delegating execution to the generated API infrastructure.
@@ -323,15 +319,15 @@ infrastructure
 - The OpenAPI specification is the single source of truth for the API contract.
 - OpenAPI Generator generates the server API interface, controller, delegate interface and API models during the build.
 - The inbound REST adapter contains no business logic and delegates use case execution to the application layer.
-- The delegate pattern keeps the REST API infrastructure generated while allowing the inbound adapter implementation
-  to remain independent of the generated code.
+- The delegate pattern keeps the REST API infrastructure generated while allowing the inbound adapter implementation to
+  remain independent of the generated code.
 - HTTP request filters implement request preprocessing and context propagation independently of the REST adapter
   implementation.
 - Dedicated mappers translate between generated API models and application models.
 - Date and time values are represented using `LocalDateTime` because the provided data model stores timestamps without
   time zone information. Time zone handling is outside the scope of this exercise.
-- Error responses follow RFC 9457 (Problem Details for HTTP APIs), providing consistent and standardized error
-  handling across the API.
+- Error responses follow RFC 9457 (Problem Details for HTTP APIs), providing consistent and standardized error handling
+  across the API.
 
 #### Outbound JPA Adapter
 
@@ -365,7 +361,7 @@ src/main/resources
 
 ##### Outbound JPA Adapter Decisions
 
-- The outbound JPA adapter implements the PriceRepository output port defined by the application layer.
+- The outbound JPA adapter implements the `PriceRepository` output port defined by the application layer.
 - Spring Data repositories remain internal to the outbound adapter and are never exposed to the application layer.
 - JPA entities are isolated from the domain model. Dedicated mappers translate between persistence entities and domain
   objects.
@@ -377,15 +373,15 @@ src/main/resources
 
 ## Error Handling
 
-Error handling is a transversal concern spanning the application and infrastructure layers.
+Error handling is a cross-cutting concern spanning the application and infrastructure layers.
 
 The application layer raises business exceptions carrying rich context. The infrastructure layer intercepts them and
 maps them to RFC 9457 Problem Detail responses.
 
 ### Application Layer Exceptions
 
-Application exceptions represent business-level conditions that occur during use case execution. They are defined in
-the `application.exception` package and carry business context to enable meaningful error responses.
+Application exceptions represent business-level conditions that occur during use case execution. They are defined in the
+`application.exception` package and carry business context to enable meaningful error responses.
 
 | Exception | Condition | Business Context |
 | --- | --- | --- |
@@ -414,7 +410,7 @@ Every error response includes the following fields:
 
 | Field | Type | Description |
 | --- | --- | --- |
-| `type` | URI | URN identifying the problem type. |
+| `type` | URI reference | URN identifying the problem type. |
 | `title` | String | Short human-readable summary of the problem. |
 | `status` | Integer | HTTP status code. |
 | `detail` | String | Human-readable explanation specific to this occurrence of the problem. |
