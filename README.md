@@ -151,7 +151,7 @@ Further details about the API-first approach and the REST adapter implementation
 | API | OpenAPI 3.0, OpenAPI Generator, Swagger UI |
 | Persistence | Jakarta Persistence, Spring Data JPA, H2, Flyway |
 | Logging | SLF4J, Logback |
-| Testing | Spring Boot Test, JUnit 5, AssertJ, Mockito |
+| Testing | Spring Boot Test, JUnit 5, AssertJ, Mockito, ArchUnit |
 | Development Tools | Lombok, Spring AOP |
 | Code Formatting | Spotless (Eclipse JDT Formatter) |
 | Code Quality | Checkstyle |
