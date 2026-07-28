@@ -8,6 +8,7 @@ package es.inditex.pricingengine.application.usecase.getprice;
 import java.time.LocalDateTime;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
 
@@ -25,6 +26,7 @@ import es.inditex.pricingengine.domain.vo.ProductId;
  * @author Albert
  */
 @Service
+@Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class GetPriceInteractor implements GetPriceUseCase {
   private final PriceRepository priceRepository;
