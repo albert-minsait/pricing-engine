@@ -20,5 +20,6 @@ class PricingEngineApplicationIT {
    */
   @Test
   void shouldLoadApplicationContext() {
+    // No implementation required.
   }
 }

@@ -67,7 +67,7 @@ class PricesApiControllerIT {
     final URI uri = UriComponentsBuilder.fromPath(BASE_URL)
         .queryParam("brandId", 1L)
         .queryParam("productId", 35455L)
-        .queryParam("applicationDate", "2020-06-14T10:00:00")
+        .queryParam("applicationDate", "2020-06-14T09:00:00")
         .build(true)
         .toUri();
 
@@ -118,7 +118,7 @@ class PricesApiControllerIT {
         .expectBody(ProblemDetail.class)
         .value(problem -> {
           assertThat(problem).isNotNull();
-          assertThat(problem.getType().toString()).isEqualTo("urn:problem-type:pricing:price-not-found");
+          assertThat(problem.getType()).isEqualTo("urn:problem-type:pricing:price-not-found");
           assertThat(problem.getTitle()).isEqualTo("Price Not Found");
           assertThat(problem.getStatus()).isEqualTo(404);
           assertThat(problem.getDetail())
@@ -334,7 +334,7 @@ class PricesApiControllerIT {
         .expectBody(ProblemDetail.class)
         .value(problem -> {
           assertThat(problem).isNotNull();
-          assertThat(problem.getType().toString()).contains("invalid-request");
+          assertThat(problem.getType()).contains("invalid-request");
           assertThat(problem.getTitle()).isEqualTo("Invalid Request");
           assertThat(problem.getStatus()).isEqualTo(400);
           assertThat(problem.getDetail()).contains("brandId");
@@ -367,7 +367,7 @@ class PricesApiControllerIT {
         .expectBody(ProblemDetail.class)
         .value(problem -> {
           assertThat(problem).isNotNull();
-          assertThat(problem.getType().toString()).contains("invalid-request");
+          assertThat(problem.getType()).contains("invalid-request");
           assertThat(problem.getTitle()).isEqualTo("Invalid Request");
           assertThat(problem.getStatus()).isEqualTo(400);
           assertThat(problem.getDetail()).contains("productId");
@@ -400,7 +400,7 @@ class PricesApiControllerIT {
         .expectBody(ProblemDetail.class)
         .value(problem -> {
           assertThat(problem).isNotNull();
-          assertThat(problem.getType().toString()).contains("invalid-request");
+          assertThat(problem.getType()).contains("invalid-request");
           assertThat(problem.getTitle()).isEqualTo("Invalid Request");
           assertThat(problem.getStatus()).isEqualTo(400);
           assertThat(problem.getDetail()).contains("1");
@@ -433,7 +433,7 @@ class PricesApiControllerIT {
         .expectBody(ProblemDetail.class)
         .value(problem -> {
           assertThat(problem).isNotNull();
-          assertThat(problem.getType().toString()).contains("price-not-found");
+          assertThat(problem.getType()).contains("price-not-found");
           assertThat(problem.getTitle()).isEqualTo("Price Not Found");
           assertThat(problem.getStatus()).isEqualTo(404);
           assertThat(problem.getDetail()).contains("No applicable price found");
@@ -473,7 +473,7 @@ class PricesApiControllerIT {
           .expectBody(ProblemDetail.class)
           .value(problem -> {
             assertThat(problem).isNotNull();
-            assertThat(problem.getType().toString()).isEqualTo("urn:problem-type:pricing:unexpected-error");
+            assertThat(problem.getType()).isEqualTo("urn:problem-type:pricing:unexpected-error");
             assertThat(problem.getTitle()).isEqualTo("Unexpected Error");
             assertThat(problem.getStatus()).isEqualTo(500);
             assertThat(problem.getDetail()).isEqualTo("An unexpected error occurred");
