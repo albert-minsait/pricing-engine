@@ -57,6 +57,8 @@ exercise.
   source set, where package-level documentation helps describe the architecture while avoiding unnecessary
   documentation in implementation-specific packages.
 - MapStruct or similar is intentionally not used because the required mappings are simple and manually implemented.
+- Date and time values are represented using `LocalDateTime` because the provided data model stores timestamps without
+  time zone information. Time zone handling is outside the scope of this exercise.
 
 ### Out of Scope
 

@@ -231,7 +231,13 @@ application
 - Use case results are scoped to their corresponding use case instead of being placed in shared application models. This
   avoids creating generic containers shared by unrelated operations.
 - The application layer orchestrates use cases by coordinating domain operations. It does not contain domain business
-  rules, persistence logic or framework-specific concerns.
+  rules, persistence logic, or framework-dependent behavior.
+- Spring annotations such as `@Service` and `@Transactional` are considered acceptable in interactors as a pragmatic
+  trade-off. They do not affect the architectural dependency direction: the application's business logic does not rely
+  on Spring. Instead, Spring relies on the application classes to compose the object graph through IoC/DI and to apply
+  cross-cutting concerns such as transaction management via proxies. A stricter interpretation of Clean Architecture
+  would define interactors as `@Bean`s in an Infrastructure `@Configuration` class and apply transactions through a
+  decorator or proxy, at the cost of additional configuration and boilerplate.
 - The application layer raises domain-specific exceptions for business-level conditions that occur during use case
   execution (not for domain rule violations). These exceptions encapsulate business context, enabling upstream adapters
   to provide meaningful, context-aware error responses. Example: `PriceNotFoundException` represents the business
@@ -324,8 +330,6 @@ infrastructure
 - HTTP request filters implement request preprocessing and context propagation independently of the REST adapter
   implementation.
 - Dedicated mappers translate between generated API models and application models.
-- Date and time values are represented using `LocalDateTime` because the provided data model stores timestamps without
-  time zone information. Time zone handling is outside the scope of this exercise.
 - Error responses follow RFC 9457 (Problem Details for HTTP APIs), providing consistent and standardized error handling
   across the API.
 
